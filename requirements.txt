@@ -1,0 +1,7 @@
+# Python >= 3.9. Core simulator (simulate.py + failure_lab/model.py) is
+# stdlib-only; these are for the charts, notebook, and Streamlit app.
+matplotlib>=3.9
+streamlit>=1.50
+pandas>=2.0
+jupyter>=1.0
+nbformat>=5.10

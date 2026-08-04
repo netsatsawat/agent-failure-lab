@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch compound error kill your AI agent</title>
+<meta name="description" content="Interactive calculator: how per-step accuracy compounds across a multi-step AI agent, and what verify/retry mitigations buy back.">
+<style>
+  body {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e;
+    --muted: #898781; --grid: #e1e0d9; --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7;
+      --muted: #898781; --grid: #2c2c2a; --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    }
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 20px 48px; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: var(--ink2); margin: 0 0 24px; font-size: 15px; }
+  .sub a { color: inherit; }
+  .controls { display: flex; flex-wrap: wrap; gap: 20px 32px; padding: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 20px; }
+  .ctl { flex: 1 1 200px; min-width: 180px; }
+  .ctl label { display: block; font-size: 13px; color: var(--ink2); margin-bottom: 2px; }
+  .ctl output { font-weight: 600; color: var(--ink); }
+  .ctl input[type=range] { width: 100%; accent-color: var(--s1); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .tile { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; border-top: 3px solid var(--tc); }
+  .tile .name { font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 8px; }
+  .tile .chip { width: 10px; height: 10px; border-radius: 3px; background: var(--tc); }
+  .tile .val { font-size: 30px; font-weight: 600; margin: 2px 0; }
+  .tile .calls { font-size: 12.5px; color: var(--muted); }
+  .chartwrap { position: relative; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px 4px; }
+  .tooltip { position: absolute; pointer-events: none; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 12.5px; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    white-space: nowrap; z-index: 2; }
+  .tooltip .row { display: flex; align-items: center; gap: 6px; }
+  .tooltip .chip { width: 8px; height: 8px; border-radius: 2px; }
+  .budget { margin-top: 20px; padding: 14px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; font-size: 14.5px;
+    color: var(--ink2); }
+  .budget strong { color: var(--ink); }
+  footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
+  footer a { color: var(--ink2); }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Watch compound error kill your AI agent</h1>
+  <p class="sub">Chain enough steps and good per-step accuracy becomes a failing
+    product. Drag the sliders. Companion to <em>Why Your AI Agent Will Fail</em>
+    by <a href="https://satsawat.ai">Satsawat Natakarnkitkul</a> ·
+    <a href="https://satsawat.ai/#newsletter">AI in Practice newsletter</a></p>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Per-step accuracy: <output id="pOut">85%</output></label>
+      <input type="range" id="p" min="50" max="100" value="85" step="1">
+    </div>
+    <div class="ctl">
+      <label>Steps in the chain: <output id="nOut">10</output></label>
+      <input type="range" id="n" min="1" max="25" value="10" step="1">
+    </div>
+    <div class="ctl">
+      <label>Verifier recall: <output id="rOut">90%</output></label>
+      <input type="range" id="r" min="50" max="100" value="90" step="5">
+    </div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="chartwrap" id="chartwrap">
+    <svg id="chart" viewBox="0 0 840 380" width="100%" role="img"
+         aria-label="End-to-end success versus chain length for the three mitigation strategies"></svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <div class="budget" id="budget"></div>
+
+  <footer>
+    Mitigation semantics: <em>none</em>, failures go undetected · <em>verify</em>,
+    an LLM verifier (+1 call/step) catches failures at the recall you set and a caught
+    failure gets one corrected attempt · <em>retry</em>, code-detectable failures
+    (schema, tool errors) get one free retry.
+    The verify curve assumes a perfect-precision verifier; real ones false-flag.
+    Source &amp; notebook:
+    <a href="https://github.com/netsatsawat/agent-failure-lab">github.com/netsatsawat/agent-failure-lab</a>
+  </footer>
+</main>
+
+<script>
+"use strict";
+const SERIES = [
+  { key: "none",   color: "var(--s1)" },
+  { key: "verify", color: "var(--s2)" },
+  { key: "retry",  color: "var(--s3)" },
+];
+const MAXN = 25;
+const M = { l: 52, r: 70, t: 14, b: 34 }, W = 840, H = 380;
+
+const effP = (p, m, r) =>
+  m === "none" ? p : m === "retry" ? 1 - (1 - p) ** 2 : p + (1 - p) * r * p;
+const chain = (p, n, m, r) => effP(p, m, r) ** n;
+const callsPerStep = (p, m, r) =>
+  m === "none" ? 1 : m === "retry" ? 1 + (1 - p) : 2 + (1 - p) * r;
+
+const $ = id => document.getElementById(id);
+const X = n => M.l + (n - 1) / (MAXN - 1) * (W - M.l - M.r);
+const Y = v => M.t + (1 - v) * (H - M.t - M.b);
+const fmtPct = v => (v * 100).toFixed(1) + "%";
+
+function read() {
+  return { p: +$("p").value / 100, n: +$("n").value, r: +$("r").value / 100 };
+}
+
+function render() {
+  const { p, n, r } = read();
+  $("pOut").textContent = Math.round(p * 100) + "%";
+  $("nOut").textContent = n;
+  $("rOut").textContent = Math.round(r * 100) + "%";
+
+  $("tiles").innerHTML = SERIES.map(s => {
+    const v = chain(p, n, s.key, r);
+    const c = (callsPerStep(p, s.key, r) * n).toFixed(1);
+    return `<div class="tile" style="--tc:${s.color}">
+      <div class="name"><span class="chip"></span>${s.key}</div>
+      <div class="val">${fmtPct(v)}</div>
+      <div class="calls">${c} expected LLM calls over ${n} steps</div>
+    </div>`;
+  }).join("");
+
+  const gridY = [0, 0.25, 0.5, 0.75, 1];
+  let svg = gridY.map(v =>
+    `<line x1="${M.l}" y1="${Y(v)}" x2="${W - M.r}" y2="${Y(v)}"
+       stroke="var(--grid)" stroke-width="1"/>
+     <text x="${M.l - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11"
+       fill="var(--muted)">${v * 100}%</text>`).join("");
+  for (let s = 5; s <= MAXN; s += 5) {
+    svg += `<text x="${X(s)}" y="${H - M.b + 18}" text-anchor="middle"
+      font-size="11" fill="var(--muted)">${s}</text>`;
+  }
+  svg += `<text x="${(M.l + W - M.r) / 2}" y="${H - 2}" text-anchor="middle"
+    font-size="11.5" fill="var(--muted)">steps in the chain</text>`;
+  svg += `<line x1="${X(n)}" y1="${M.t}" x2="${X(n)}" y2="${H - M.b}"
+    stroke="var(--baseline)" stroke-width="1" stroke-dasharray="3 3"/>`;
+
+  for (const s of SERIES) {
+    const pts = [];
+    for (let i = 1; i <= MAXN; i++) pts.push(`${X(i)},${Y(chain(p, i, s.key, r))}`);
+    const yEnd = Y(chain(p, MAXN, s.key, r));
+    svg += `<polyline points="${pts.join(" ")}" fill="none"
+        stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>
+      <text x="${W - M.r + 6}" y="${yEnd + 4}" font-size="12"
+        fill="${s.color}">${s.key}</text>`;
+    const yn = Y(chain(p, n, s.key, r));
+    svg += `<circle cx="${X(n)}" cy="${yn}" r="4.5" fill="${s.color}"
+      stroke="var(--surface)" stroke-width="2"/>`;
+  }
+  svg += `<line id="cross" x1="0" y1="${M.t}" x2="0" y2="${H - M.b}"
+    stroke="var(--baseline)" stroke-width="1" visibility="hidden"/>`;
+  $("chart").innerHTML = svg;
+
+  const needed = Math.pow(0.90, 1 / n);
+  $("budget").innerHTML =
+    `<strong>The reliability budget:</strong> to hit <strong>90% end-to-end</strong>
+     over <strong>${n} steps</strong> with no mitigation, every step needs
+     <strong>${(needed * 100).toFixed(2)}%</strong> accuracy. Past a handful of
+     steps, reliability is an architecture property, not a model property.`;
+}
+
+const wrap = $("chartwrap"), tip = $("tooltip"), svgEl = $("chart");
+svgEl.addEventListener("mousemove", ev => {
+  const { p, r } = read();
+  const rect = svgEl.getBoundingClientRect();
+  const sx = (ev.clientX - rect.left) * (W / rect.width);
+  const step = Math.max(1, Math.min(MAXN,
+    Math.round((sx - M.l) / (W - M.l - M.r) * (MAXN - 1) + 1)));
+  const cross = $("cross");
+  cross.setAttribute("x1", X(step)); cross.setAttribute("x2", X(step));
+  cross.setAttribute("visibility", "visible");
+  tip.style.display = "block";
+  tip.innerHTML = `<strong>${step} step${step > 1 ? "s" : ""}</strong>` +
+    SERIES.map(s => `<div class="row"><span class="chip"
+      style="background:${s.color}"></span>${s.key}:
+      ${fmtPct(chain(p, step, s.key, r))}</div>`).join("");
+  const wr = wrap.getBoundingClientRect();
+  let tx = ev.clientX - wr.left + 14, ty = ev.clientY - wr.top + 10;
+  if (tx + 150 > wr.width) tx -= 170;
+  tip.style.left = tx + "px"; tip.style.top = ty + "px";
+});
+svgEl.addEventListener("mouseleave", () => {
+  tip.style.display = "none";
+  $("cross").setAttribute("visibility", "hidden");
+});
+
+for (const id of ["p", "n", "r"]) $(id).addEventListener("input", render);
+render();
+</script>
+</body>
+</html>

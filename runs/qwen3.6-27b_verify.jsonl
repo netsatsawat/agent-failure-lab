@@ -1,0 +1,72 @@
+{"doc_id": 1, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 268.49, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 300.85, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 39.01, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 18.05, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 58.73, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 1, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 29.78, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 18.02, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 19.35, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 1, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 13.4, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 38.86, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 40.31, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 18.9, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 54.92, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 2, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 30.51, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 32.0, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 2, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 23.2, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 2, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 16.5, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 45.84, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 51.01, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 22.28, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 110.57, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 3, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 59.59, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 3, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 19.7, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 23.53, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 3, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 17.52, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 44.3, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 65.33, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 27.46, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 38.58, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 32.46, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 24.35, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 33.82, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 4, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 34.54, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 86.59, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 70.75, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 27.69, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 77.86, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 45.84, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 27.36, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 33.56, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 5, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 27.6, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 66.64, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 72.41, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 32.32, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "convert_amounts", "outcome": "wrong_value", "attempts": 1, "detail": "'hotel room - 2 nights': got 153.1, expected 153.16", "latency_s": 55.66, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 77.75, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 6, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 28.68, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 27.54, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 6, "mitigation": "verify", "step": "__end_to_end__", "outcome": "failure", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 19.54, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 105.27, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 7, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 56.76, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 30.69, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 46.77, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 86.39, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 7, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 26.39, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 35.72, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 7, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "extract_dates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 36.69, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "extract_items", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 53.96, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "categorize", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 55.6, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "request_rates", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 29.05, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "convert_amounts", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 55.66, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "sum_categories", "outcome": "success", "attempts": 2, "detail": "", "latency_s": 66.4, "verifier_checks": 1, "verifier_flags": 1}
+{"doc_id": 8, "mitigation": "verify", "step": "policy_check", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 21.23, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "final_summary", "outcome": "success", "attempts": 1, "detail": "", "latency_s": 28.35, "verifier_checks": 1, "verifier_flags": 0}
+{"doc_id": 8, "mitigation": "verify", "step": "__end_to_end__", "outcome": "success", "attempts": 0, "detail": "", "latency_s": 0}
