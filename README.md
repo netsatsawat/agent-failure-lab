@@ -2,6 +2,8 @@
 
 > Watch compound error kill your AI agent. Then watch the mitigations save it.
 
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg) ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776AB?logo=python&logoColor=white) ![No API keys](https://img.shields.io/badge/API%20keys-none-1baf7a) ![Local LLM](https://img.shields.io/badge/real%20mode-local%20Ollama-eb6834) [![Calculator](https://img.shields.io/badge/live-calculator-2a78d6)](https://netsatsawat.github.io/agent-failure-lab/)
+
 Chain 10 steps at 85% per-step accuracy and your end-to-end success rate is
 **19.7%**. Every AI leader nods at that sentence. Almost nobody feels it.
 This lab makes the math runnable and visual, and since arithmetic alone never
@@ -14,7 +16,7 @@ Fail*](https://www.amazon.com/dp/B0H17XQ9SY) and the writing at
 
 ![python simulate.py, the compound-failure table](assets/simulate.gif)
 
-## Why this repo exists
+## 🧭 Why this repo exists
 
 Multi-step agents are how AI ships now: extract, look up, transform, decide,
 summarize. Each step is one model call, and each call is right most of the
@@ -37,7 +39,7 @@ sliders on it, then run a real 8-step agent on a real local model and watch
 the failure taxonomy come out: what the verifier catches, what it costs, and
 what it misses.
 
-## Feel the math (no model needed)
+## 🧮 Feel the math (no model needed)
 
 **1. Zero-install CLI** (stdlib only, Python 3.9 or newer): `python simulate.py`
 
@@ -71,7 +73,7 @@ Real mode measures the recall assumption empirically.
 
 ![Mitigations at 85% per-step accuracy](assets/mitigations.png)
 
-## Prove it on a real model
+## 🔬 Prove it on a real model
 
 Real mode runs an 8-step expense-report agent (extract dates, extract items,
 categorize, request exchange rates via a tool, convert, sum, policy check,
@@ -184,7 +186,7 @@ the error it missed was six cents. That is precisely the class the analytic
 model says you are paying it to catch. Full logs, reports, and charts in
 `runs/`.
 
-## Repo layout
+## 🗂️ Repo layout
 
 ```
 METHODOLOGY.md             experimental design, grading protocol, threats to validity
@@ -201,7 +203,7 @@ runs/                      real-mode results: a JSONL log, markdown report, and 
 scripts/                   generators: charts, notebook, README GIF
 ```
 
-## What's next
+## 🔭 What's next
 
 Each item below is an open question the current results raise but cannot
 answer at N=8. In rough priority order:
