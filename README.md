@@ -1,8 +1,24 @@
-# agent-failure-lab
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.png">
+    <img src="assets/banner-light.png" alt="agent-failure-lab" width="100%">
+  </picture>
+</h1>
+
+<p align="center">
+  <a href="#-feel-the-math-no-model-needed">Feel the math</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="#-prove-it-on-a-real-model">Prove it on a real model</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://netsatsawat.github.io/agent-failure-lab/">Live calculator</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://www.amazon.com/dp/B0H17XQ9SY">The book</a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License: MIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.9+"></a>
+  <img src="https://img.shields.io/badge/API%20keys-none-1baf7a?style=for-the-badge" alt="No API keys">
+  <img src="https://img.shields.io/badge/real%20mode-local%20Ollama-eb6834?style=for-the-badge" alt="Real mode: local Ollama">
+  <a href="https://netsatsawat.github.io/agent-failure-lab/"><img src="https://img.shields.io/badge/live-calculator-2a78d6?style=for-the-badge" alt="Live calculator"></a>
+  <a href="https://satsawat.ai"><img src="https://img.shields.io/badge/author-satsawat.ai-e8a112?style=for-the-badge" alt="Author: satsawat.ai"></a>
+</p>
 
 > Watch compound error kill your AI agent. Then watch the mitigations save it.
-
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg) ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776AB?logo=python&logoColor=white) ![No API keys](https://img.shields.io/badge/API%20keys-none-1baf7a) ![Local LLM](https://img.shields.io/badge/real%20mode-local%20Ollama-eb6834) [![Calculator](https://img.shields.io/badge/live-calculator-2a78d6)](https://netsatsawat.github.io/agent-failure-lab/)
 
 Chain 10 steps at 85% per-step accuracy and your end-to-end success rate is
 **19.7%**. Every AI leader nods at that sentence. Almost nobody feels it.
