@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render assets/simulate.gif — a terminal-style animation of the CLI output.
+"""Render assets/simulate.gif: a terminal-style animation of the CLI output.
 
 Uses the real `python simulate.py` output (captured live) typed line by line.
 """

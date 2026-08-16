@@ -2,7 +2,7 @@
 
 MockClient is oracle-based: it computes the correct answer for each step from
 the same conditional-truth functions the classifier uses, then optionally
-injects failures — which makes the whole pipeline testable without a model.
+injects failures, which makes the whole pipeline testable without a model.
 """
 
 from __future__ import annotations
@@ -104,7 +104,7 @@ class MockClient:
         if mode and self.fail_first_attempt_only and self._attempts[key] > 1:
             mode = None
         if mode == "garbage":
-            return "Sure! Here is what I found — the trip looks reasonable overall."
+            return "Sure! Here is what I found. The trip looks reasonable overall."
         if mode == "wrong_tool":
             return json.dumps({"tool_calls": [
                 {"tool": "currency_lookup", "args": {"code": "THB"}}]})

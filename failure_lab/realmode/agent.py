@@ -4,12 +4,12 @@ Design choices (documented because they define what the numbers mean):
 
 - Each step consumes the agent's OWN prior outputs, so wrong values propagate
   exactly as in production.
-- Per-step classification compares against the *conditional* oracle — the
-  correct answer given the agent's actual inputs — so a step is never blamed
+- Per-step classification compares against the *conditional* oracle (the
+  correct answer given the agent's actual inputs), so a step is never blamed
   for errors it inherited.
 - If a step ends in a code-detectable failure (format_error or tool_error)
   even after mitigation, the chain substitutes that step's oracle so
-  downstream steps remain measurable — and the document is an end-to-end
+  downstream steps remain measurable. The document is an end-to-end
   failure at that point (a production chain has visibly broken there).
   End-to-end success requires no substitutions AND a final summary matching
   ABSOLUTE ground truth.
@@ -41,7 +41,7 @@ def extract_json(text: str):
     """Best-effort JSON object extraction.
 
     Strips code fences, then attempts a string-aware parse starting at each
-    '{' until one succeeds — tolerant of prose braces before the object and
+    '{' until one succeeds. Tolerant of prose braces before the object and
     of '}' characters inside JSON strings.
     """
     text = re.sub(r"```(?:json)?", "", text)
@@ -102,7 +102,7 @@ def _dedupe_items(parsed):
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-_ONLY_JSON = ("Respond with ONLY the JSON object — no prose, no markdown, "
+_ONLY_JSON = ("Respond with ONLY the JSON object: no prose, no markdown, "
               "no explanations. Numbers must be plain (no thousands separators).")
 
 
@@ -137,8 +137,8 @@ def _p_extract_items(ctx):
             f'{{"items": [{{"description": "<text>", "amount": <number>, '
             f'"currency": "THB"|"USD"|"EUR"}}]}}\n'
             f"Copy descriptions exactly as written (without the dots). "
-            f"Include only items actually being claimed for reimbursement — "
-            f"exclude any line marked VOIDED, cancelled, or not claimable. "
+            f"Include only items actually being claimed for reimbursement. "
+            f"Exclude any line marked VOIDED, cancelled, or not claimable. "
             f"{_ONLY_JSON}")
 
 
@@ -196,7 +196,7 @@ def _o_categorize(ctx):
     for it in ctx["out"]["extract_items"]["items"]:
         d = it.get("description", "")
         # Items outside ground truth (e.g. a wrongly-extracted VOIDED line)
-        # still have a true category via the template table — the categorize
+        # still have a true category via the template table. The categorize
         # step must never be punished for upstream extraction mistakes.
         cat = truth.get(_norm(d)) or TEMPLATE_CATEGORIES.get(_norm(d), "other")
         out.append({"description": d, "category": cat})
@@ -215,7 +215,7 @@ def _e_categorize(ctx, parsed, oracle):
     if set(got) != set(exp):
         return WRONG_VALUE, "descriptions mismatch"
     # A description absent from both ground truth and the template table has
-    # no defined true category (e.g. an upstream reworded item) — any valid
+    # no defined true category (e.g. an upstream reworded item). Any valid
     # category is accepted, so this step is never charged twice for an
     # upstream mistake it inherited.
     known = {_norm(i.description) for i in ctx["gt"].items} | set(TEMPLATE_CATEGORIES)
@@ -461,11 +461,11 @@ CODE_DETECTABLE = {FORMAT_ERROR, TOOL_ERROR}
 
 
 def _verifier_prompt(task_prompt: str, raw_response: str) -> str:
-    """Blind LLM verifier — sees the task and the response, never ground truth."""
+    """Blind LLM verifier: sees the task and the response, never ground truth."""
     return ("You are a strict, independent reviewer of an AI worker's output.\n"
             "TASK GIVEN TO THE WORKER:\n<<<\n" + task_prompt + "\n>>>\n"
             "WORKER'S RESPONSE:\n<<<\n" + raw_response + "\n>>>\n"
-            "Independently redo the task — recompute any arithmetic carefully, "
+            "Independently redo the task. Recompute any arithmetic carefully, "
             "re-check every extracted or derived value against the task input, "
             "and check the required output format. Then respond with ONLY "
             '{"verdict": "pass"} or {"verdict": "fail", "reason": "<short>"}. '
@@ -498,8 +498,8 @@ def end_to_end_ok(ctx, substitutions: int) -> bool:
 def run_chain(client, doc: str, gt, mitigation: str = "none"):
     """Run one document through all 8 steps.
 
-    Returns (records, end_to_end, infra_affected) — infra_affected marks a
-    document whose chain hit a transport failure, so reports can exclude it
+    Returns (records, end_to_end, infra_affected), where infra_affected marks
+    a document whose chain hit a transport failure, so reports can exclude it
     from model-quality metrics.
     """
     import time
@@ -525,7 +525,7 @@ def run_chain(client, doc: str, gt, mitigation: str = "none"):
             t0 = time.time()
             try:
                 raw = client.complete(prompt)
-            except Exception as e:  # transport failure — not the model's fault
+            except Exception as e:  # transport failure, not the model's fault
                 latency += time.time() - t0
                 outcome, detail, parsed = INFRA_ERROR, str(e)[:200], None
                 break

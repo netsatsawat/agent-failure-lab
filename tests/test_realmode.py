@@ -10,7 +10,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from failure_lab.realmode.agent import STEPS
 from failure_lab.realmode.llm import MockClient
+from failure_lab.realmode.report import aggregate
 from failure_lab.realmode.runner import run_experiment
 
 
@@ -18,6 +20,24 @@ def rates(summary, step):
     recs = [r for r in summary["records"] if r["step"] == step]
     return {o: sum(r["outcome"] == o for r in recs) / len(recs)
             for o in ("success", "wrong_value", "format_error", "tool_error")}
+
+
+class FlakyClient(MockClient):
+    """Oracle mock whose transport dies for one document (infra_error)."""
+
+    def __init__(self, dead_doc: int, **kw):
+        super().__init__(**kw)
+        self.dead_doc = dead_doc
+        self._doc = 0
+
+    def begin_doc(self, doc_id: int) -> None:
+        super().begin_doc(doc_id)
+        self._doc = doc_id
+
+    def complete(self, prompt: str) -> str:
+        if self._doc == self.dead_doc:
+            raise RuntimeError("connection refused")
+        return super().complete(prompt)
 
 
 def test_oracle_is_perfect():
@@ -69,7 +89,7 @@ def test_wrong_value_is_not_recovered_by_retry():
     assert rates(s, "convert_amounts")["wrong_value"] == 1.0
     # wrong values propagate (no substitution) and poison the end result
     assert s["end_to_end_rate"] == 0.0
-    # retry must NOT have fired — wrong_value is not code-detectable
+    # retry must NOT have fired: wrong_value is not code-detectable
     assert all(r["attempts"] == 1 for r in s["records"]
                if r["step"] == "convert_amounts")
 
@@ -95,6 +115,37 @@ def test_verifier_pass_leaves_results_untouched():
     checked = [r for r in s["records"] if r["step"] != "__end_to_end__"]
     assert all(r["verifier_checks"] == 1 and r["verifier_flags"] == 0
                for r in checked)
+
+
+def test_infra_document_is_excluded_from_per_step_rates():
+    # Doc 2 loses transport at step 3 and is wrong on every other step. The
+    # report says infra-affected documents are excluded from the metrics, so
+    # none of those wrong values may reach a per-step rate: all rates stay 1.0.
+    steps = [s[0] for s in STEPS]
+    records = [{"doc_id": 1, "step": s, "outcome": "success", "attempts": 1}
+               for s in steps]
+    records.append({"doc_id": 1, "step": "__end_to_end__", "outcome": "success",
+                    "infra_affected": False, "attempts": 0})
+    records += [{"doc_id": 2, "step": s, "attempts": 1,
+                 "outcome": "infra_error" if i == 2 else "wrong_value"}
+                for i, s in enumerate(steps)]
+    records.append({"doc_id": 2, "step": "__end_to_end__", "outcome": "failure",
+                    "infra_affected": True, "attempts": 0})
+    agg = aggregate(records)
+    assert agg["n_docs"] == 1 and agg["infra_docs"] == 1
+    assert agg["observed_e2e"] == 1.0
+    assert all(v == 1.0 for v in agg["step_rates"].values()), agg["step_rates"]
+    assert "wrong_value" not in agg["per_step"][steps[0]]
+    # the transport failure itself stays visible in the infra error column
+    assert agg["per_step"][steps[2]]["infra_error"] == 1
+
+
+def test_runner_and_report_agree_when_a_document_hits_infra():
+    s = run_experiment(FlakyClient(dead_doc=3), n_docs=4, verbose=False)
+    assert s["infra_docs"] == 1 and s["scored_docs"] == 3
+    # one number for one run: the JSON summary and the markdown report must
+    # divide by the same thing.
+    assert s["end_to_end_rate"] == aggregate(s["records"])["observed_e2e"] == 1.0
 
 
 def test_extract_json_is_string_aware():

@@ -2,13 +2,13 @@
 
 The mitigation semantics hinge on *detectability* of a step failure:
 
-- ``none``   — failures go undetected; the chain keeps running and produces a
+- ``none``   : failures go undetected; the chain keeps running and produces a
   confidently wrong result. End-to-end success requires every step to succeed.
-- ``retry``  — failures are cheaply detectable (schema validation, tool errors,
+- ``retry``  : failures are cheaply detectable (schema validation, tool errors,
   parse failures) at zero LLM cost, and a detected failure gets one retry.
   This is the best case: it only applies to the failure modes you can catch
   with code.
-- ``verify`` — failures need an LLM verifier to catch (hallucinations, subtle
+- ``verify`` : failures need an LLM verifier to catch (hallucinations, subtle
   reasoning errors). The verifier costs one extra call per step, detects a
   failure with probability ``verifier_recall``, and a detected failure gets one
   corrected attempt at the base success rate (the correction is not re-verified).

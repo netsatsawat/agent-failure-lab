@@ -44,8 +44,7 @@ reproduction.
 Rendering varies date formats, currency symbols, and separators. The
 `--hard` flag adds scan-noise lines, shuffled item order, a
 `[VOIDED - do not reimburse]` line that must be excluded, and a printed
-"Total claimed" that is deliberately wrong. None of it changes the ground
-truth.
+"Total claimed" that is wrong. None of it changes the ground truth.
 
 ## Variables
 

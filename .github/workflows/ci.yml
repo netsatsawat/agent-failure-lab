@@ -1,0 +1,31 @@
+# CI runs everything that needs no local model: there is no Ollama on the
+# runner, so real mode cannot execute here. The JSONL logs, reports, and
+# charts in runs/ are produced locally by `python realmode.py run ...` and
+# committed; verify_readme_claims.py re-aggregates them and checks the
+# README's results table, narrated failures, and sample document against
+# what the code and the logs actually say.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The badge and the install instructions both promise 3.9 or newer,
+        # so the floor is tested, not just a current release.
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r requirements.txt
+      - name: deterministic real-mode tests (oracle mock, no model)
+        run: python tests/test_realmode.py
+      - name: every README number matches its artifact
+        run: python scripts/verify_readme_claims.py

@@ -28,6 +28,12 @@ def aggregate(records: list[dict]) -> dict:
     if not records:
         raise ValueError("run file contains no records (aborted run?)")
     steps = [s[0] for s in STEPS]
+    # A document that hit a transport failure is excluded as a whole: the rest
+    # of its steps ran in a chain that was already broken, so they are not
+    # evidence about model quality either. Only the infra_error record itself
+    # stays, so the taxonomy still shows where transport failed.
+    infra_ids = {r.get("doc_id") for r in records
+                 if r.get("infra_affected") or r["outcome"] == "infra_error"}
     per_step: dict = {s: defaultdict(int) for s in steps}
     e2e = defaultdict(int)
     retried = 0
@@ -40,6 +46,8 @@ def aggregate(records: list[dict]) -> dict:
                 infra_docs += 1  # infrastructure failure, not model quality
             else:
                 e2e[r["outcome"]] += 1
+        elif r.get("doc_id") in infra_ids and r["outcome"] != "infra_error":
+            continue  # excluded document: only its infra_error stays visible
         else:
             per_step[r["step"]][r["outcome"]] += 1
             if r.get("attempts", 1) > 1:

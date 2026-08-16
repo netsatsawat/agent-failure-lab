@@ -17,6 +17,7 @@ def run_experiment(client, n_docs: int = 8, mitigation: str = "none",
     rng = random.Random(seed)
     lines = []
     e2e_ok = 0
+    infra_docs = 0
     f = None
     if out_path:
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -29,6 +30,7 @@ def run_experiment(client, n_docs: int = 8, mitigation: str = "none",
                 client.begin_doc(doc_id)
             records, ok, infra_affected = run_chain(client, doc, gt, mitigation)
             e2e_ok += ok
+            infra_docs += infra_affected
             doc_lines = [{"doc_id": doc_id, "mitigation": mitigation, **r}
                          for r in records]
             doc_lines.append({"doc_id": doc_id, "mitigation": mitigation,
@@ -51,6 +53,10 @@ def run_experiment(client, n_docs: int = 8, mitigation: str = "none",
     finally:
         if f:
             f.close()
+    # end_to_end_rate uses the same denominator as the report: documents whose
+    # chain hit a transport failure are excluded, not counted as failures.
+    scored_docs = n_docs - infra_docs
     return {"label": label, "n_docs": n_docs, "mitigation": mitigation,
-            "end_to_end_rate": e2e_ok / n_docs, "records": lines,
+            "scored_docs": scored_docs, "infra_docs": infra_docs,
+            "end_to_end_rate": e2e_ok / max(1, scored_docs), "records": lines,
             "out_path": str(out_path) if out_path else None}

@@ -1,8 +1,8 @@
 """Synthetic expense-report generator with exact ground truth.
 
-Documents are rendered in deliberately varied (but unambiguous) formats so
-extraction is non-trivial. Every quantity the agent must produce is derivable
-from the ground truth, which makes automatic failure classification possible.
+Documents are rendered in varied (but unambiguous) formats so extraction is
+non-trivial. Every quantity the agent must produce is derivable from the
+ground truth, which makes automatic failure classification possible.
 """
 
 from __future__ import annotations
@@ -119,7 +119,7 @@ def render_document(gt: GroundTruth, rng: random.Random,
 
     ``hard=True`` adds realistic adversity WITHOUT changing the ground truth:
     scan-noise lines, shuffled items, a VOIDED line that must be excluded,
-    and a printed "Total claimed" that is deliberately wrong — an agent that
+    and a printed "Total claimed" that is wrong on purpose. An agent that
     copies the shortcut instead of computing gets caught by classification.
     """
     date_styles = [
@@ -143,7 +143,7 @@ def render_document(gt: GroundTruth, rng: random.Random,
         item_lines.append(f"  - {i.description}{leader}{style.format(amt=amt)}")
     if hard:
         rng.shuffle(item_lines)
-        # The VOIDED description must not collide with a real item — evaluation
+        # The VOIDED description must not collide with a real item: evaluation
         # keys items by description, so a duplicate would make the trap ambiguous.
         gt_descs = {i.description for i in gt.items}
         candidates = sorted(t for ts in _TEMPLATES.values() for t in ts

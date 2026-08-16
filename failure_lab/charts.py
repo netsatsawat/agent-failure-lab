@@ -1,4 +1,4 @@
-"""Shared matplotlib chart layer — one style for the notebook, app, and README.
+"""Shared matplotlib chart layer: one style for the notebook, app, and README.
 
 Palette and chart chrome follow a validated light-mode data-viz palette:
 categorical slots (blue / orange / aqua) for the three mitigation series,

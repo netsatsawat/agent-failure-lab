@@ -36,12 +36,11 @@ Fail*](https://www.amazon.com/dp/B0H17XQ9SY) and the writing at
 
 Multi-step agents are how AI ships now: extract, look up, transform, decide,
 summarize. Each step is one model call, and each call is right most of the
-time. That is precisely the trap, because per-step accuracy compounds against
-you. A 3-step demo that works three times out of five is enough to
-green-light a project. The same quality spread over 10 production steps is a
-1-in-5 long shot. Worse, most of those failures are not crashes. They are
-confidently wrong answers, so your logs stay green while your users lose
-trust.
+time. That is the trap: per-step accuracy compounds against you. A 3-step
+demo that works three times out of five is enough to green-light a project.
+The same quality spread over 10 production steps is a 1-in-5 long shot.
+Worse, most of those failures are not crashes. They are confidently wrong
+answers, so your logs stay green while your users lose trust.
 
 The escape is not "wait for a better model." It is architecture. The two
 standard mitigations have very different economics, and one question decides
@@ -131,9 +130,8 @@ grand total: 544.33 USD · flags: none
 Generation is seeded and deterministic (same `--seed`, same documents), with
 varied date formats, currency symbols, and mixed THB/EUR/USD amounts. The
 `--hard` flag adds scan-noise lines, shuffled items, a VOIDED line that must
-be excluded, and a printed "Total claimed" that is deliberately wrong, as
-bait for any agent that copies instead of computing. None of it changes the
-ground truth.
+be excluded, and a printed "Total claimed" that is wrong, as bait for any
+agent that copies instead of computing. None of it changes the ground truth.
 
 The full experimental design lives in [METHODOLOGY.md](METHODOLOGY.md):
 research questions, variables, grading protocol, tolerances, harness
@@ -148,11 +146,14 @@ happens at three layers:
    document's actual dates, total, and policy flags. This is the number that
    compounds.
 3. **The harness itself is tested.** A deterministic oracle mock replays the
-   whole pipeline with known-perfect (or deliberately corrupted) answers.
-   `python tests/test_realmode.py` runs 10 tests covering the classifier,
-   both mitigations, the traps, and the fairness guarantees: decoys cannot
+   whole pipeline with known-perfect (or corrupted) answers.
+   `python tests/test_realmode.py` runs 12 tests covering the classifier,
+   both mitigations, the traps, the fairness guarantees (decoys cannot
    collide with real items, decoy items still have true categories, and
-   duplicates are caught. The blind verifier never sees ground truth.
+   duplicates are caught), and the infrastructure-failure accounting: a
+   document whose chain hit a transport error is excluded from the per-step
+   rates as well as the end-to-end one. The blind verifier never sees
+   ground truth.
 
 ### Reproduce it from scratch
 
@@ -257,8 +258,8 @@ answer at N=8. In rough priority order:
   make that a stable format a standalone eval harness can score and diff, so
   a CI job can fail a build when an agent's report card regresses between
   versions.
-- **Real-document mode.** The honest gap in this lab is that even hard mode
-  is cleaner than production paperwork. Synthetic documents are what make
+- **Real-document mode.** The honest gap in this lab is that even hard mode is
+  cleaner than production paperwork. Synthetic documents are what make
   exact grading possible, so bring-your-own-documents needs a labeling story
   first: likely a helper that drafts ground truth for your documents and has
   you confirm it once, after which the same grading protocol applies.
